@@ -15,21 +15,37 @@ public class RestBackgroundTask {
     FirstActivity activity;
 
     @RestService
-    FacebookPageRestClient restClient;
+    PhoneBookRestClient restClient;
 
     @Background
-    void doInBackground(String pageName) {
-        try {
-            FacebookPage fbPage = restClient.getPage(pageName);
-            publishResult(fbPage);
-        } catch (Exception e) {
-            publishError(e);
-        }
-    }
 
+    void getPhoneBook() {
+
+        try {
+
+            restClient.setHeader("X-Dreamfactory-Application-Name", "phonebook");
+
+            PhoneBook phoneBook = restClient.getPhoneBook();
+
+            publishResult(phoneBook);
+
+        } catch (Exception e) {
+
+            publishError(e);
+
+        }
+
+    }
+    @UiThread
+
+    void publishResult(PhoneBook phoneBook) {
+
+        activity.updatePhonebook(phoneBook);
+
+    }
     @UiThread
     void publishResult(FacebookPage fbPage) {
-        activity.goToSecondActivity(fbPage);
+
     }
 
     @UiThread
